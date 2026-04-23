@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "Need": {
+      "title": "Humanitarian Need",
+      "description": "A specific request for assistance in a disaster zone.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "category": { "type": "string", "description": "Category of need (e.g., Medical, Food, Shelter)" },
+        "urgency": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "description": { "type": "string" },
+        "requesterName": { "type": "string", "description": "PII: Name of the person needing help" },
+        "requesterPhone": { "type": "string", "description": "PII: 10-digit phone number" },
+        "status": { "type": "string", "enum": ["Open", "In Progress", "Resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["category", "urgency", "location", "status"]
+    },
+    "Volunteer": {
+      "title": "Volunteer",
+      "description": "A person available to provide assistance.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "contact": { "type": "string" },
+        "available": { "type": "boolean" }
+      },
+      "required": ["name", "skills"]
+    }
+  },
+  "firestore": {
+    "/needs/{needId}": {
+      "schema": "Need",
+      "description": "Main collection for reported needs."
+    },
+    "/volunteers/{volunteerId}": {
+      "schema": "Volunteer",
+      "description": "Collection of registered volunteers."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function isValidNeed(data) {
+      return data.keys().hasAll(['category', 'urgency', 'location', 'status'])
+        && data.category is string && data.category.size() < 100
+        && data.urgency in ['Low', 'Medium', 'High']
+        && data.location.lat is number && data.location.lng is number
+        && data.status in ['Open', 'In Progress', 'Resolved']
+        && (!('requesterPhone' in data) || (data.requesterPhone is string && data.requesterPhone.size() <= 15));
+    }
+
+    match /needs/{needId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidNeed(request.resource.data) && isValidId(needId);
+      allow update: if isSignedIn() && isValidNeed(request.resource.data)
+        && (
+          (resource.data.status == 'Open' && request.resource.data.status == 'In Progress' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+          ||
+          (resource.data.status == 'In Progress' && request.resource.data.status == 'Resolved' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+        );
+    }
+
+    match /volunteers/{volunteerId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.resource.data.name is string && request.resource.data.skills is list;
+    }
+  }
+}
