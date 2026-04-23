@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --color-olive: #4A5D23;
+  --color-chai: #D2AB80;
+  --color-carob: #725C3A;
+  --color-dark-carob: #3E3220;
+  --color-cream: #FDFBF7;
+  --bg-main: #4A5D23;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--color-carob);
+  font-family: var(--font-sans);
+  transition: all 0.3s ease;
+}
+
+.ug-border {
+  border: 2px solid black;
+}
+
+.ug-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+}
+
+.ug-card {
+  background-color: white;
+  border: 2px solid black;
+  color: var(--color-dark-carob);
+  border-radius: 0.125rem;
+}
+
+.ug-header {
+  background-color: var(--color-cream);
+}
+
+.ug-input {
+  background-color: white;
+  border: 2px solid black;
+  color: var(--color-dark-carob);
+  padding: 0.5rem;
+  outline: none;
+}
+
+/* Accessibility: Zenith AI Mode */
+.zenith-active {
+  background-color: #000 !important;
+  color: #FFFF00 !important;
+  font-size: 110%; 
+}
+
+.zenith-active .ug-card, 
+.zenith-active .ug-input,
+.zenith-active .ug-border,
+.zenith-active .ug-header {
+  background-color: #FFFF00 !important;
+  color: #000 !important;
+  border-color: #000 !important;
+  box-shadow: 4px 4px 0px 0px #FFFF00 !important;
+}
+
+/* Leaflet Overrides */
+.leaflet-container {
+  background: #E5E7EB !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-carob);
+  border: 1px solid black;
+}
